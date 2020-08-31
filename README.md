@@ -4,3 +4,6 @@
 ## Application
 #### You are asked to draw a picture specified in "Draw:" section and you only have 30 seconds to draw. As you start drawing, the model starts to predict your drawing and shows its prediction in "Predict:" section.
 ![alt text](https://github.com/arshafiee/Quick-Draw/blob/master/result.png)
+## Trained models
+Contact me to access trained models. Email: arminshafiee7712@yahoo.com
+
