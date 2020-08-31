@@ -160,93 +160,93 @@ def main():
     print(use_cuda)
     device = torch.device('cuda:0' if use_cuda else 'cpu')
 
-    # np.random.seed(1234)
-    #
-    # DATA_DIR = "D:/QuickDraw/numpy_bitmap"
-    # class_names = os.listdir(DATA_DIR)
-    # num_classes = 345
-    # im_size = 28
-    # batch_size = 32
-    # rate = 0.2
-    #
-    # r""" loading data and label(target) and calculating mean and std"""
-    # for i in range(num_classes):
-    #     temp = np.load(f'{DATA_DIR}/{class_names[i]}')
-    #     temp = torch.from_numpy(temp)
-    #     temp = torch.reshape(temp, (-1, im_size, im_size))
-    #     if i == 0:
-    #         data = temp[:1250]
-    #         target = torch.zeros((1250, 1))
-    #     else:
-    #         data = torch.cat([data, temp[:1250]], 0)
-    #         target = torch.cat([target, torch.ones((1250, 1)) * i], 0)
-    #
-    # print(len(data))
-    # print(len(target))
-    # train, train_target, valid, valid_target = Create_Valid_data(data, target, im_size=im_size,
-    #                                                              rate=rate)  # TODO: this func has changed!
-    # del (data)
-    # del (target)
-    # print(len(train))
-    #
-    # tfms = transforms.Compose([
-    #     transforms.ToPILImage(),
-    #     transforms.Resize((56, 56)),
-    #     transforms.ToTensor(),
-    #     transforms.Normalize((0.5,), (1.0,))
-    # ])
-    #
-    # train_ds = ClassificationDataset(train, train_target, transform=tfms)
-    # train_dl = DataLoader(train_ds, batch_size=batch_size, shuffle=True, num_workers=8)
-    #
-    # valid_ds = ClassificationDataset(valid, valid_target, transform=tfms)
-    # valid_dl = DataLoader(valid_ds, batch_size=batch_size, shuffle=False, num_workers=8)
-    #
-    # model = SimpleCNN(num_classes)
-    # model.cuda(device)
-    #
-    # criterion = nn.CrossEntropyLoss()
-    # optimizer = optim.Adam(model.parameters(), lr=0.0001)
-    #
-    # num_epochs = 10
-    # losses = []
-    # for epoch in range(num_epochs):
-    #     for i, (inputs, targets) in enumerate(train_dl):
-    #         inputs = Variable(inputs)
-    #         inputs = inputs.to(device)
-    #         targets = Variable(targets)
-    #         targets = targets.to(device)
-    #
-    #         optimizer.zero_grad()
-    #         outputs = model(inputs)
-    #
-    #         loss = criterion(outputs, targets)
-    #         losses.append(loss.item())
-    #
-    #         loss.backward()
-    #
-    #         optimizer.step()
-    #
-    #         if (i + 1) % 50 == 0:
-    #             print('Epoch [%2d/%2d], Step [%3d/%3d], Loss: %.4f'
-    #                   % (epoch + 1, num_epochs, i + 1, len(train_ds) // batch_size, loss.item()))
-    #
-    # plt.figure(figsize=(12, 4))
-    # plt.plot(losses)
-    # plt.xlabel('Iteration')
-    # plt.ylabel('loss')
-    # plt.title('Cross Entropy Loss');
-    # plt.show()
-    #
-    # evaluate_model(model, train_dl)
-    # print("---------------------------------------------------------------------------")
-    # evaluate_model(model, valid_dl)
-    # return model, valid_dl, valid_ds
+    np.random.seed(1234)
+
+    DATA_DIR = "D:/QuickDraw/numpy_bitmap"
+    class_names = os.listdir(DATA_DIR)
+    num_classes = 345
+    im_size = 28
+    batch_size = 32
+    rate = 0.2
+
+    r""" loading data and label(target) and calculating mean and std"""
+    for i in range(num_classes):
+        temp = np.load(f'{DATA_DIR}/{class_names[i]}')
+        temp = torch.from_numpy(temp)
+        temp = torch.reshape(temp, (-1, im_size, im_size))
+        if i == 0:
+            data = temp[:1250]
+            target = torch.zeros((1250, 1))
+        else:
+            data = torch.cat([data, temp[:1250]], 0)
+            target = torch.cat([target, torch.ones((1250, 1)) * i], 0)
+
+    print(len(data))
+    print(len(target))
+    train, train_target, valid, valid_target = Create_Valid_data(data, target, im_size=im_size,
+                                                                 rate=rate)  # TODO: this func has changed!
+    del (data)
+    del (target)
+    print(len(train))
+
+    tfms = transforms.Compose([
+        transforms.ToPILImage(),
+        transforms.Resize((56, 56)),
+        transforms.ToTensor(),
+        transforms.Normalize((0.5,), (1.0,))
+    ])
+
+    train_ds = ClassificationDataset(train, train_target, transform=tfms)
+    train_dl = DataLoader(train_ds, batch_size=batch_size, shuffle=True, num_workers=8)
+
+    valid_ds = ClassificationDataset(valid, valid_target, transform=tfms)
+    valid_dl = DataLoader(valid_ds, batch_size=batch_size, shuffle=False, num_workers=8)
+
+    model = SimpleCNN(num_classes)
+    model.cuda(device)
+
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=0.0001)
+
+    num_epochs = 10
+    losses = []
+    for epoch in range(num_epochs):
+        for i, (inputs, targets) in enumerate(train_dl):
+            inputs = Variable(inputs)
+            inputs = inputs.to(device)
+            targets = Variable(targets)
+            targets = targets.to(device)
+
+            optimizer.zero_grad()
+            outputs = model(inputs)
+
+            loss = criterion(outputs, targets)
+            losses.append(loss.item())
+
+            loss.backward()
+
+            optimizer.step()
+
+            if (i + 1) % 50 == 0:
+                print('Epoch [%2d/%2d], Step [%3d/%3d], Loss: %.4f'
+                      % (epoch + 1, num_epochs, i + 1, len(train_ds) // batch_size, loss.item()))
+
+    plt.figure(figsize=(12, 4))
+    plt.plot(losses)
+    plt.xlabel('Iteration')
+    plt.ylabel('loss')
+    plt.title('Cross Entropy Loss');
+    plt.show()
+
+    evaluate_model(model, train_dl)
+    print("---------------------------------------------------------------------------")
+    evaluate_model(model, valid_dl)
+    return model, valid_dl, valid_ds
 
 
 if __name__ == '__main__':
     main()
-    # model,valid_dl,valid_ds = main()
-    # model_save_name = 'classifier-20.pt'
-    # path = f"D:/QuickDraw/trained models/{model_save_name}"
-    # torch.save(model.state_dict(), path)
+    model,valid_dl,valid_ds = main()
+    model_save_name = 'classifier-20.pt'
+    path = f"D:/QuickDraw/trained models/{model_save_name}"
+    torch.save(model.state_dict(), path)
